@@ -1,0 +1,22 @@
+# Python & Virtualenv
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment & local secrets
+.env
+.env.local
+
+# Databases
+db.sqlite3
+db.sqlite3-journal
+
+# Static & Media
+staticfiles/
+media/
+
+# Logs & build
+*.log
+.DS_Store
