@@ -70,21 +70,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database Configuration (supports Hostinger live MySQL, DATABASE_URL, or SQLite)
-DATABASE_URL = os.getenv('DATABASE_URL')
 DB_HOST = os.getenv('DB_HOST')
-
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-elif DB_HOST:
-    # Live Hostinger MySQL or Local MySQL database
-    DATABASES = {
+DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.getenv('DB_NAME', 'ecommerce_db'),
@@ -96,14 +83,6 @@ elif DB_HOST:
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',
             }
-        }
-    }
-else:
-    # Default SQLite fallback
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
