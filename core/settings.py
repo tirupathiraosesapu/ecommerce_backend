@@ -74,9 +74,9 @@ DB_HOST = os.getenv('DB_HOST')
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('DB_NAME', 'u859141856_ecommerce_db2'),
-            'USER': os.getenv('DB_USER', 'u859141856_tirupathi_new'),
-            'PASSWORD': os.getenv('DB_PASSWORD', 'VKkb@h494rJ6S8$'),
+            'NAME': os.getenv('DB_NAME', 'db_user'),
+            'USER': os.getenv('DB_USER', 'welcome'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
             'HOST': DB_HOST,
             'PORT': os.getenv('DB_PORT', '3306'),
             'OPTIONS': {
