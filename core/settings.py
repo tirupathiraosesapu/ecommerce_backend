@@ -70,8 +70,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database Configuration (supports Render PostgreSQL via DATABASE_URL or local MySQL Workbench / SQLite)
+# Database Configuration (supports Hostinger live MySQL, DATABASE_URL, or SQLite)
 DATABASE_URL = os.getenv('DATABASE_URL')
+DB_HOST = os.getenv('DB_HOST')
 
 if DATABASE_URL:
     DATABASES = {
@@ -81,30 +82,30 @@ if DATABASE_URL:
             conn_health_checks=True,
         )
     }
+elif DB_HOST:
+    # Live Hostinger MySQL or Local MySQL database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'ecommerce_db'),
+            'USER': os.getenv('DB_USER', 'root'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': DB_HOST,
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',
+            }
+        }
+    }
 else:
-    DB_ENGINE = os.getenv('DB_ENGINE', 'mysql')
-    if DB_ENGINE == 'sqlite':
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
+    # Default SQLite fallback
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
-    else:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.mysql',
-                'NAME': os.getenv('DB_NAME', 'ecommerce_db'),
-                'USER': os.getenv('DB_USER', 'root'),
-                'PASSWORD': os.getenv('DB_PASSWORD', ''),
-                'HOST': os.getenv('DB_HOST', '127.0.0.1'),
-                'PORT': os.getenv('DB_PORT', '3306'),
-                'OPTIONS': {
-                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-                    'charset': 'utf8mb4',
-                }
-            }
-        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -178,6 +179,7 @@ SPECTACULAR_SETTINGS = {
 # CORS & CSRF configuration
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com',
     'https://*.vercel.app',
